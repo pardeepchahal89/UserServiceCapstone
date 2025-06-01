@@ -6,19 +6,25 @@ import com.codewithpardeep.userservicecapstone.dtos.LoginResponseDto;
 import com.codewithpardeep.userservicecapstone.dtos.SignupRequestDto;
 import com.codewithpardeep.userservicecapstone.dtos.UserDto;
 import com.codewithpardeep.userservicecapstone.models.User;
+import com.codewithpardeep.userservicecapstone.repositories.TokenRepository;
 import com.codewithpardeep.userservicecapstone.services.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.codewithpardeep.userservicecapstone.models.Token;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
+import java.util.Optional;
 
 
 @RestController
 public class UserController {
     private final UserService userService;
+    private final TokenRepository tokenRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, TokenRepository tokenRepository) {
         this.userService = userService;
+        this.tokenRepository = tokenRepository;
     }
 
 
@@ -40,6 +46,16 @@ public class UserController {
     public void logout() {
     }
 
-    public void validateToken(String token) {
+    @GetMapping("/validate/{token}")
+    public ResponseEntity<Boolean> validateToken(@PathVariable("token") String tokenValue) {
+        User user = userService.validateToken(tokenValue);
+        ResponseEntity<Boolean> responseEntity;
+        if(user != null) {
+            responseEntity = new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        else {
+            responseEntity = new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+        }
+        return responseEntity;
     }
 }

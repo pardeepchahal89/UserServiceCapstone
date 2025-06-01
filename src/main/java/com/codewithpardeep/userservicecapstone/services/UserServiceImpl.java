@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User signup(String name, String email, String password) {
-        if(userRepository.findByEmail(email).isPresent()){
+        if (userRepository.findByEmail(email).isPresent()) {
             return null;
         }
 
@@ -43,12 +43,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Token login(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
-        if(userOptional.isEmpty()) {
+        if (userOptional.isEmpty()) {
             // throw an exception
             return null;
         }
         User user = userOptional.get();
-        if(!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
             return null;
         }
         Token token = new Token();
@@ -68,7 +68,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User validateToken(String token) {
-        return null;
+    public User validateToken(String tokenValue) {
+        Optional<Token> tokenOptional = tokenRepository.findByTokenValueAndDeletedAndExpireAtGreaterThan(
+                tokenValue, false, new Date());
+
+        if (tokenOptional.isEmpty()) {
+            return null;
+        }
+
+        Token token = tokenOptional.get();
+        return token.getUser();
     }
 }
