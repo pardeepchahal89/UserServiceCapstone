@@ -13,18 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.codewithpardeep.userservicecapstone.models.Token;
 
-import java.util.Date;
-import java.util.Optional;
-
 
 @RestController
 public class UserController {
     private final UserService userService;
-    private final TokenRepository tokenRepository;
 
-    public UserController(UserService userService, TokenRepository tokenRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.tokenRepository = tokenRepository;
     }
 
 
