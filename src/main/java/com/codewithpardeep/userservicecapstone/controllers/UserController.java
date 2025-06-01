@@ -1,14 +1,11 @@
 package com.codewithpardeep.userservicecapstone.controllers;
 
 
-import com.codewithpardeep.userservicecapstone.dtos.LoginRequestDto;
-import com.codewithpardeep.userservicecapstone.dtos.LoginResponseDto;
-import com.codewithpardeep.userservicecapstone.dtos.SignupRequestDto;
-import com.codewithpardeep.userservicecapstone.dtos.UserDto;
+import com.codewithpardeep.userservicecapstone.dtos.*;
 import com.codewithpardeep.userservicecapstone.models.User;
-import com.codewithpardeep.userservicecapstone.repositories.TokenRepository;
 import com.codewithpardeep.userservicecapstone.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.codewithpardeep.userservicecapstone.models.Token;
@@ -38,7 +35,9 @@ public class UserController {
         return loginResponseDto;
     }
 
-    public void logout() {
+    @PostMapping("/logout")
+    public RequestEntity<Void> logout(@RequestBody LogoutRequestDto logoutRequestDto) {
+        return null;
     }
 
     @GetMapping("/validate/{token}")
